@@ -1,0 +1,30 @@
+# Maven build output
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Local environment and secrets
+.env
+.env.*
+application-local.yml
+application-local.yaml
+
+# Logs and runtime files
+*.log
+logs/
+*.pid
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Packaged artifacts
+*.jar
+*.war
