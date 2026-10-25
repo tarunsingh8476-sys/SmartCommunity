@@ -46,5 +46,8 @@ public class AuthService {
   otps.deleteByEmail(e);String code=String.format("%06d",random.nextInt(1_000_000));EmailOtp o=new EmailOtp();o.setEmail(e);o.setOtpHash(encoder.encode(code));o.setExpiresAt(Instant.now().plusSeconds(300));o.setLastSentAt(Instant.now());o.setAttempts(0);otps.save(o);email.sendOtp(e,code);
  }
  private String norm(String e){return e.trim().toLowerCase(Locale.ROOT);}
- private Map<String,Object> profile(User u){Map<String,Object> m=new LinkedHashMap<>();m.put("id",u.getId());m.put("name",u.getName());m.put("email",u.getEmail());m.put("avatarUrl",u.getAvatarUrl());m.put("emailVerified",u.isEmailVerified());return m;}
+ private Map<String,Object> profile(User u){Map<String,Object> m=new LinkedHashMap<>();
+  m.put("id",u.getId());m.put("name",u.getName());m.put("email",u.getEmail());m.put("avatarUrl",u.getAvatarUrl());m.put("emailVerified",u.isEmailVerified());
+  m.put("platformRole", u.getPlatformRole().name());
+  return m;}
 }

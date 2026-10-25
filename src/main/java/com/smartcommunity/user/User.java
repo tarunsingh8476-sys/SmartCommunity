@@ -14,6 +14,9 @@ public class User {
  @Column(nullable=false,updatable=false) private Instant createdAt=Instant.now();
  @Column(nullable=false) private Instant updatedAt=Instant.now();
  @PreUpdate void touch(){updatedAt=Instant.now();}
+ @Enumerated(EnumType.STRING)
+ @Column(name = "platform_role", nullable = false)
+ private PlatformRoles platformRole = PlatformRoles.USER;
  public enum AuthProvider { LOCAL, GOOGLE }
  public UUID getId(){return id;} public String getName(){return name;} public void setName(String v){name=v;}
  public String getEmail(){return email;} public void setEmail(String v){email=v;}
@@ -22,4 +25,10 @@ public class User {
  public AuthProvider getAuthProvider(){return authProvider;} public void setAuthProvider(AuthProvider v){authProvider=v;}
  public boolean isEmailVerified(){return emailVerified;} public void setEmailVerified(boolean v){emailVerified=v;}
  public Instant getCreatedAt(){return createdAt;} public Instant getUpdatedAt(){return updatedAt;}
+ public PlatformRoles getPlatformRole() {
+  return platformRole;
+ }
+ public void setPlatformRole(PlatformRoles platformRole) {
+  this.platformRole = platformRole;
+ }
 }

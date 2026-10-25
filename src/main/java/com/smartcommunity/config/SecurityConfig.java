@@ -2,7 +2,9 @@ package com.smartcommunity.config;
 import com.smartcommunity.user.UserRepository;
 import org.springframework.context.annotation.*;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,11 +22,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 @Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
  @Bean PasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();}
  @Bean UserDetailsService userDetailsService(UserRepository users){
   return email->{var u=users.findByEmailIgnoreCase(email).orElseThrow(()->new UsernameNotFoundException("User not found"));
-   return User.withUsername(u.getEmail()).password(u.getPassword()==null?"":u.getPassword()).authorities("ROLE_USER").build();};
+   return User.withUsername(u.getEmail()).password(u.getPassword()==null?"":u.getPassword()).authorities("ROLE_" + u.getPlatformRole().name()).build();};
  }
  @Bean SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwt, OAuth2UserService<OAuth2UserRequest,OAuth2User> oauth, @Value("${app.frontend-url}") String frontend)throws Exception{
   http.csrf(csrf->csrf.disable()).cors(Customizer.withDefaults()).sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
