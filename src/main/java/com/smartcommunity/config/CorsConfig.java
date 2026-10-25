@@ -6,8 +6,30 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.List;
 @Configuration
 public class CorsConfig {
- @Bean CorsFilter corsFilter(@Value("${app.frontend-url}") String frontend){
-  CorsConfiguration c=new CorsConfiguration();c.setAllowedOrigins(List.of(frontend));c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));c.setAllowedHeaders(List.of("Authorization","Content-Type"));c.setAllowCredentials(true);
-  UrlBasedCorsConfigurationSource s=new UrlBasedCorsConfigurationSource();s.registerCorsConfiguration("/**",c);return new CorsFilter(s);
+ @Bean
+ public CorsConfigurationSource corsConfigurationSource() {
+  CorsConfiguration config = new CorsConfiguration();
+
+  config.setAllowedOrigins(List.of(
+          "https://group3-frontend-smart-community-tnaguzl7m-shruti-65e2.vercel.app"
+  ));
+
+  config.setAllowedMethods(List.of(
+          "GET", "POST", "PUT", "PATCH",
+          "DELETE", "OPTIONS"
+  ));
+
+  config.setAllowedHeaders(List.of(
+          "Authorization", "Content-Type"
+  ));
+
+  config.setAllowCredentials(true);
+
+  UrlBasedCorsConfigurationSource source =
+          new UrlBasedCorsConfigurationSource();
+
+  source.registerCorsConfiguration("/**", config);
+
+  return source;
  }
 }

@@ -28,15 +28,16 @@ public class SecurityConfig {
  @Bean PasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();}
  @Bean UserDetailsService userDetailsService(UserRepository users){
   return email->{var u=users.findByEmailIgnoreCase(email).orElseThrow(()->new UsernameNotFoundException("User not found"));
-   return User.withUsername(u.getEmail()).password(u.getPassword()==null?"":u.getPassword()).authorities("ROLE_" + u.getPlatformRole().name()).build();};
+   return User.withUsername(u.getEmail()).password(u.getPassword()==null?"":u.getPassword()).authorities("ROLE_USER").build();};
  }
- @Bean SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwt, OAuth2UserService<OAuth2UserRequest,OAuth2User> oauth, @Value("${app.frontend-url}") String frontend)throws Exception{
+ @Bean SecurityFilterChain filterChain(HttpSecurity http,JwtAuthFilter jwt,OAuth2UserService<OAuth2UserRequest,OAuth2User> oauth, @Value("${app.frontend-url}") String frontend)throws Exception{
   http.csrf(csrf->csrf.disable()).cors(Customizer.withDefaults()).sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-   .authorizeHttpRequests(a->a.requestMatchers("/api/auth/signup","/api/auth/verify-otp","/api/auth/resend-otp","/api/auth/login","/oauth2/**","/login/oauth2/**","/error").permitAll().anyRequest().authenticated())
-   .oauth2Login(o->o.userInfoEndpoint(i->i.userService(oauth)).successHandler((req,res,auth)->{
-    res.sendRedirect(UriComponentsBuilder.fromUriString(frontend).path("/oauth/callback").build().toUriString());
-   }))
-   .exceptionHandling(e->e.authenticationEntryPoint((req,res,ex)->res.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Authentication required")));
+          .authorizeHttpRequests(a->a.requestMatchers("/api/auth/signup","/api/auth/verify-otp","/api/auth/resend-otp","/api/auth/login","/oauth2/**","/login/oauth2/**","/ws/**","/error").permitAll().anyRequest().authenticated())
+          .oauth2Login(o->o.userInfoEndpoint(i->i.userService(oauth)).successHandler((req,res,auth)->{
+           res.sendRedirect(UriComponentsBuilder.fromUriString(frontend).path("/oauth/callback").build().toUriString());
+          }))
+          .cors(cors->{})
+          .exceptionHandling(e->e.authenticationEntryPoint((req,res,ex)->res.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Authentication required")));
   http.addFilterBefore(jwt,UsernamePasswordAuthenticationFilter.class);return http.build();
  }
  @Bean OAuth2UserService<OAuth2UserRequest,OAuth2User> oauth2UserService(UserRepository users,PasswordEncoder encoder){
