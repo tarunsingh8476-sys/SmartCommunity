@@ -14,6 +14,9 @@ public class ServerService {
  public Map<String,Object> get(UUID id,String email){Server s=repo.findById(id).orElseThrow(()->new NoSuchElementException("Server not found"));if(!members.existsByServerIdAndUserEmailIgnoreCase(id,email))throw new NoSuchElementException("Server not found");return view(s);}
  @Transactional public Map<String,Object> update(UUID id,String email,ServerRequest r){Server s=owned(id,email);s.setName(r.name().trim());s.setDescription(r.description());s.setIconUrl(r.iconUrl());return view(s);}
  @Transactional public void delete(UUID id,String email){repo.delete(owned(id,email));}
- public Server owned(UUID id,String email){Server s=repo.findById(id).orElseThrow(()->new NoSuchElementException("Server not found"));if(!s.getOwner().getEmail().equalsIgnoreCase(email))throw new org.springframework.security.access.AccessDeniedException("Owner only");return s;}
+ public Server owned(UUID id,String email){
+  Server s=repo.findById(id).orElseThrow(()->new NoSuchElementException("Server not found"));
+  if(!s.getOwner().getEmail().equalsIgnoreCase(email))
+   throw new org.springframework.security.access.AccessDeniedException("Owner only");return s;}
  public Map<String,Object> view(Server s){return Map.of("id",s.getId(),"name",s.getName(),"description",Objects.toString(s.getDescription(),""),"iconUrl",Objects.toString(s.getIconUrl(),""),"ownerId",s.getOwner().getId(),"createdAt",s.getCreatedAt());}
 }

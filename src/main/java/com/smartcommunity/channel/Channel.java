@@ -9,7 +9,7 @@ public class Channel {
 
  @Column(nullable=false,length=80) private String name;
  @Column(length=500) private String description;
- @ManyToOne(fetch=FetchType.LAZY,optional=false) private com.smartcommunity.server.Server server;
+ @ManyToOne(fetch=FetchType.EAGER,optional=false) private com.smartcommunity.server.Server server;
 
  @Column(nullable=false,updatable=false) private Instant createdAt=Instant.now();
  public UUID getId(){return id;} public Instant getCreatedAt(){return createdAt;}
