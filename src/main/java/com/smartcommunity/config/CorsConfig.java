@@ -10,10 +10,7 @@ public class CorsConfig {
  public CorsConfigurationSource corsConfigurationSource() {
   CorsConfiguration config = new CorsConfiguration();
 
-  config.setAllowedOrigins(List.of(
-          "http://localhost:5173",
-          "http://localhost:5174",
-          "https://group3-frontend-smart-community-tnaguzl7m-shruti-65e2.vercel.app"
+  config.setAllowedOrigins(List.of("**"
   ));
 
   config.setAllowedMethods(List.of(
