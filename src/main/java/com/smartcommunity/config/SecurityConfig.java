@@ -34,7 +34,7 @@ public class SecurityConfig {
   http.csrf(csrf->csrf.disable()).cors(Customizer.withDefaults()).sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
           .authorizeHttpRequests(a->a.requestMatchers("/api/auth/signup","/api/auth/verify-otp","/api/auth/resend-otp","/api/auth/login","/oauth2/**","/login/oauth2/**","/ws/**","/error").permitAll().anyRequest().authenticated())
           .oauth2Login(o->o.userInfoEndpoint(i->i.userService(oauth)).successHandler((req,res,auth)->{
-           res.sendRedirect(UriComponentsBuilder.fromUriString(frontend).path("/oauth/callback").build().toUriString());
+           res.sendRedirect("https://group3-frontend-smart-community.vercel.app/userdashboard");
           }))
           .cors(cors->{})
           .exceptionHandling(e->e.authenticationEntryPoint((req,res,ex)->res.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Authentication required")));
