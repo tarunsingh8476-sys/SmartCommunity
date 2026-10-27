@@ -22,7 +22,7 @@ public class CorsConfig {
           "Authorization", "Content-Type"
   ));
 
-  config.setAllowCredentials(true);
+  config.setAllowCredentials(false);
 
   UrlBasedCorsConfigurationSource source =
           new UrlBasedCorsConfigurationSource();
