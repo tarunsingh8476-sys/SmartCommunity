@@ -21,5 +21,11 @@ public class ChannelService {
  public void requireMember(UUID id,String email){if(!members.existsByServerIdAndUserEmailIgnoreCase(id,email))throw new org.springframework.security.access.AccessDeniedException("Server membership required");}
  public Map<String,Object> view(Channel c){
   return Map.of("id",c.getId(),"name",c.getName(),"description",Objects.toString(c.getDescription(),""),"serverId",c.getServer().getId(),"createdAt",c.getCreatedAt());}
+
+ public Channel getChannelById(UUID channelId) {
+  return channels.findById(channelId)
+          .orElseThrow(() ->
+                  new NoSuchElementException("Channel not found"));
+ }
 }
 
